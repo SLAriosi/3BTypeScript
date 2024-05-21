@@ -4,6 +4,7 @@ import express,
     Response,
     NextFunction
 } from 'express'
+import 'express-async-errors'
 
 import routes from './routes'
 
@@ -25,7 +26,10 @@ app.use((
     console.log('aquii')
 
     if (error instanceof AppError) {
-        return res.status(400).json({ mess: 'err' })
+        return res.status(error.statusCode).json({
+            status: "Error",
+            message: error.mensagem
+        })
     }
 
     return res.status(500).json({

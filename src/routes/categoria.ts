@@ -17,19 +17,16 @@ interface IDadosCategoria {
 
 router.post('/', async (req, res) => {
 
-    try {
+    const objSalvar: IDadosCategoria = req.body;
 
-        const objSalvar: IDadosCategoria = req.body;
-
-        const categoria = await knex("categorias")
-            .insert(objSalvar)
-
-        res.json({ message: "Categoria Salva" })
-    } catch (e: any) {
-        console.log('e')
-        // throw new AppError('teste')
-        throw new Error('teste')
+    if (!objSalvar?.nome) {
+        throw new AppError('Nome é obrigatório!')
     }
+
+    const categoria = await knex("categorias")
+        .insert(objSalvar)
+
+    res.json({ message: "Categoria Salva" })
 })
 
 export default router
