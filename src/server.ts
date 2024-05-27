@@ -14,6 +14,8 @@ import AppError from './utils/AppError'
 
 const app = express()
 
+app.use(cors())
+
 app.use(express.json())
 
 app.use(routes)
