@@ -8,6 +8,6 @@ const routes = Router()
 
 routes.use('/usuarios', usuarioRouter)
 routes.use('/categorias', categoriaRouter)
-routes.use('/', sessionRouter)
+routes.use('/session', sessionRouter)
 
 export default routes
