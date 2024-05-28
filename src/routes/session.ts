@@ -2,7 +2,8 @@ import Router from 'express'
 import knex from '../database/knex';
 import AppError from '../utils/AppError';
 import { compare } from 'bcryptjs';
-import { hash } from 'bcrypt';
+import authConfig from '../configs/auth'
+import { sign } from 'jsonwebtoken';
 
 const router = Router();
 
@@ -22,7 +23,12 @@ router.post("/", async (req, res) => {
         throw new AppError("Email e/ou senha incorretas")
     }
 
-    res.json({ mensagem: "Você é do Jóbi" })
+    const { secret, expiresIn } = authConfig.jwt
+    const token = sign({ idUsuario: usuario.id }, secret, {
+        expiresIn
+    })
+
+    res.json({ usuario, token })
 })
 
 export default router;
