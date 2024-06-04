@@ -11,6 +11,7 @@ import cors from 'cors'
 import routes from './routes'
 
 import AppError from './utils/AppError'
+import { ZodError } from 'zod'
 
 const app = express()
 
@@ -27,7 +28,13 @@ app.use((
     next: NextFunction
 ) => {
 
-    console.log('aquii')
+    if (error instanceof ZodError) {
+        return res.status(400)
+        .send({
+            message: "Erro de validação",
+            issues: error.format()
+        })
+    }
 
     if (error instanceof AppError) {
         return res.status(error.statusCode).json({

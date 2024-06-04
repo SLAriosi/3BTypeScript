@@ -2,7 +2,7 @@ import Router from 'express'
 import knex from '../database/knex'
 import AppError from '../utils/AppError'
 import { hash } from 'bcrypt'
-import { fileTypeFromStream } from 'file-type'
+import { z } from 'zod'
 
 const router = Router()
 
@@ -13,7 +13,14 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const objSalvar = req.body
+
+    const registerBodySchema = z.object({
+        nome: z.string(),
+        email: z.string().email(),
+        senha: z.string().min(6),
+    })
+
+    const objSalvar = registerBodySchema.parse(req.body)
 
     if (!objSalvar?.senha) {
         throw new AppError('Senha é obrigatória!!')
